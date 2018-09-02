@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#kill off any older instances of analytic-server
+pkill -f analytic-server || true

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /var/www/analytic-server
+virtualenv venv
+source ./venv/bin/activate
+pip install -r Analytics/requirements.txt
