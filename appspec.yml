@@ -4,7 +4,7 @@ os: linux
 files:
   - source: /analytic-server
     destination: /var/www/analytic-server
-  - source: /analytic-server.conf
+  - source: /analytic_server.conf
     destination: /etc/apache2/sites-available
 hooks:
   ApplicationStop:
