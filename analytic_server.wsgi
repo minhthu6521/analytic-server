@@ -7,5 +7,5 @@ sys.path.insert(0,"/var/www/html/analytic-server/")
 
 from Analytics import create_app
 
-app = create_app('../../config.py')
-app.run()
+appplication = create_app('../../config.py')
+application.run()
