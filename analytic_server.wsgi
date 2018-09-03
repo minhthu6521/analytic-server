@@ -5,7 +5,7 @@ import logging
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0,"/var/www/html/analytic-server/")
 
-from analytic-server import create_app
+from Analytics import create_app
 
 app = create_app('../../config.py')
 app.run()
