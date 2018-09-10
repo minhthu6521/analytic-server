@@ -1,8 +1,0 @@
-#!/bin/bash
-
-#enable analytic-server
-a2ensite analytic-server
-#disable default config
-a2dissite 000-default
-service apache2 restart
-python run.py
