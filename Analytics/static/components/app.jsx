@@ -1,9 +1,12 @@
 const App = () => (
-    <div className="logo" onClick={() => goHome()}>
-      <div>Testing~~~~</div>
-      <div className="chart-container" style={{position: 'relative', height:'40vh', width:'80vw'}}>
-        <canvas id="myChart"  width="300" height="100"></canvas>
-      </div>
+    <div>
+      <NavBar />
+      <Switch>
+        <Route path="/:id" exact component={Dashboard} />
+        <Route path="/timeline/:id" exact component={Dashboard} />
+        <Route path="/candidate-experience/:id" exact component={Dashboard} />
+        <Route path="/efficiency/:id" exact component={Dashboard} />
+      </Switch>
     </div>
 );
 

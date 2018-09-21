@@ -19,6 +19,7 @@
   "homepage": "https://github.com/minhthu6521/analytic-server#readme",
   "dependencies": {
     "babel-cli": "^6.26.0",
-    "babel-preset-react-app": "^3.1.2"
+    "babel-preset-react-app": "^3.1.2",
+    "react-router-dom": "^4.3.1"
   }
 }
