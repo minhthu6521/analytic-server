@@ -1,11 +1,11 @@
+activate_this = '/home/ubuntu/analytic-server/venv/bin/activate_this.py'
+with open(activate_this) as f:
+	exec(f.read(), dict(__file__=activate_this))
 
-#!/usr/bin/python
 import sys
 import logging
+
 logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0,"/var/www/html/analytic-server/")
 
-from Analytics import create_app
-
-appplication = create_app('../../config.py')
-application.run()
+from app import app as application
