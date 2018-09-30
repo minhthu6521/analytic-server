@@ -7,7 +7,7 @@ class GraphLayout extends React.Component {
     }
 
     componentDidMount() {
-        fetch('/api/dashboard')
+        fetch(this.props.api)
           .then((response) => {
             return response.json();
           })
