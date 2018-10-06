@@ -4,6 +4,7 @@ from flask import Flask
 from flask_caching import Cache
 from blueprint import bp
 import Analytics.views
+import models
 
 
 def init_cache(app):

@@ -21,7 +21,10 @@ class GraphLayout extends React.Component {
     render() {
         var arrayOfCanvas = this.state.data.map(obj => {
             return (<GraphTemplate data={obj} key={obj.id} />)
-        })
+        });
         return (<div>{arrayOfCanvas}</div>)
     }
 }
+
+const api = $("#fetch-api").data("fetch_api");
+ReactDOM.render(<GraphLayout api={api} />, document.getElementById("stat_container"));

@@ -1,0 +1,1 @@
+SQLALCHEMY_DATABASE_URI = 'mysql://root:salasana@localhost/Analytics?charset=utf8mb4'

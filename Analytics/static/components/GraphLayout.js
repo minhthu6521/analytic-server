@@ -35,6 +35,7 @@ var GraphLayout = function (_React$Component) {
         key: "render",
         value: function render() {
             var arrayOfCanvas = this.state.data.map(function (obj) {
+                console.log(obj);
                 return React.createElement(GraphTemplate, { data: obj, key: obj.id });
             });
             return React.createElement(
@@ -47,3 +48,6 @@ var GraphLayout = function (_React$Component) {
 
     return GraphLayout;
 }(React.Component);
+
+var api = $("#fetch-api").data("fetch_api");
+ReactDOM.render(React.createElement(GraphLayout, { api: api }), document.getElementById("stat_container"));
