@@ -1,10 +1,11 @@
 {% extends "main.html" %}
 {% block title %} Applications {% endblock %}
 {% block body %}
+    <h1>Applications</h1>
     <div id="fetch-api" data-fetch_api="/api/applications"></div>
     <div id="stat_container"></div>
+    <div id="search_plan" style="display: none;">{{ search_plan }}</div>
 {% endblock %}
 {% block script %}
-    <script src="{{ url_for('static', filename='components/GraphTemplate.js') }}"></script>
-    <script src="{{ url_for('static', filename='components/GraphLayout.js') }}"></script>
+
 {% endblock %}

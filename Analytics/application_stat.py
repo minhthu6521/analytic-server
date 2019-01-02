@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
+from flask_babel import gettext
 from stat import BasePageBlueprint, BaseStat
+from models.application_model import Application
+from models.company_model import Company
+from models.position_model import Position, PositionViewCounter
 
 
 def register(original_class):
@@ -23,33 +27,73 @@ class ApplicationStat(BaseStat):
 
 @register
 class NumberOfViewAndApplied(ApplicationStat):
-    id = "number_of_view_and_applied"
-    chart_type = "line"
-
-    def set_configuration(self):
-        self.configuration["type"] = self.chart_type
-        self.configuration["data"]["labels"] = ["January", "February", "March", "April", "May", "June", "July"]
-        self.set_title("Applications/View ratio")
-        self.configuration["id"] = self.id
-        self.configuration["data"]["datasets"] = [
-            {"backgroundColor": "rgba(235,192,235,0.2)",
-             "borderColor": "rgba(235,192,235,1)",
-             "data": [65, 59, 80, 81, 56, 55, 40],
-             "label": "View"
-             },
-            {"backgroundColor": "rgba(246,120,120,0.2)",
-             "borderColor": "rgba(246,120,120,1)",
-             "data": [28, 48, 40, 19, 86, 27, 90],
-             "label": "Applied"
-             }
+    """
+    {
+        "id": "number_of_view_and_applied",
+        "display_type": "line",
+        "criteria": [
+            {
+                "table": PositionViewCounter,
+                "op": count,
+                "time_column": time,
+                "extra_filter: {},
+                "group_by": "timeframe"
+            },
+            {
+                "table": Application,
+                "op": count,
+                "time_column": application_date,
+                "extra_filter": {},
+                "group_by": "timeframe"
+            }
         ]
+    }
+    """
+    id = "number_of_view_and_applied"
+    schema = {
+            "title": gettext(u"Views and applied"),
+            "items": [
+                {
+                    "display_type": "line_chart",
+                    "id": "view_and_applied_line",
+                    "group_by": "timeframe",
+                    "criteria": [
+                        {
+                            "table": PositionViewCounter,
+                            "group_column": PositionViewCounter.time,
+                            "label": "View",
+                            "op": "count",
+                            "time_column": PositionViewCounter.time,
+                            "extra_filter": None,
+                            "display": {
+                                "backgroundColor": "rgba(235,192,235,0.2)",
+                                "borderColor": "rgba(235,192,235,1)",
+                            }
+                        },
+                        {
+                            "table": Application,
+                            "group_column": Application.application_date,
+                            "op": "count",
+                            "label": "Applied",
+                            "time_column": Application.application_date,
+                            "extra_filter": None,
+                            "display": {
+                                "backgroundColor": "rgba(246,120,120,0.2)",
+                                "borderColor": "rgba(246,120,120,1)",
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
 
 
 class ApplicationStatsLayout(BasePageBlueprint):
+    items = ApplicationStat.stats.keys()
+
     def get_configurations(self):
         configurations = []
         for item in self.items:
-            stat = ApplicationStat.stat_for(item)()
-            stat.set_configuration()
-            configurations.append(stat.configuration)
+            stat = ApplicationStat.stat_for(item)(context=self.context)
+            configurations.append(stat.get_configurations())
         return configurations

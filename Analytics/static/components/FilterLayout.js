@@ -6,28 +6,51 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var GraphLayout = function (_React$Component) {
-    _inherits(GraphLayout, _React$Component);
+var FilterLayout = function (_React$Component) {
+    _inherits(FilterLayout, _React$Component);
 
-    function GraphLayout(props) {
-        _classCallCheck(this, GraphLayout);
+    function FilterLayout(props) {
+        _classCallCheck(this, FilterLayout);
 
-        return _possibleConstructorReturn(this, (GraphLayout.__proto__ || Object.getPrototypeOf(GraphLayout)).call(this, props));
+        var _this = _possibleConstructorReturn(this, (FilterLayout.__proto__ || Object.getPrototypeOf(FilterLayout)).call(this, props));
+
+        _this.mapFilter = function (obj) {
+            if (obj.type === "dropdown_widget") {
+                return React.createElement(DropdownFilter, { data: obj, key: obj.id, action: _this.props.setFilter });
+            } else if (obj.type === "select2_widget") {
+                return React.createElement(Select2Filter, { data: obj, key: obj.id, action: _this.props.setFilter });
+            } else if (obj.type === "checkbox_widget") {
+                return React.createElement(CheckboxFilter, { data: obj, key: obj.id, action: _this.props.setFilter });
+            }
+        };
+
+        return _this;
     }
 
-    _createClass(GraphLayout, [{
+    _createClass(FilterLayout, [{
         key: "render",
         value: function render() {
-            var arrayOfCanvas = this.props.data.map(function (obj) {
-                return React.createElement(GraphTemplate, { data: obj, key: obj.id });
+            var _this2 = this;
+
+            var arrayOfGeneralFilters = this.props.plan["general"]["items"].map(function (obj) {
+                return _this2.mapFilter(obj);
+            });
+            var arrayOfSpecificFilters = this.props.plan["specific"]["items"].map(function (obj) {
+                return _this2.mapFilter(obj);
             });
             return React.createElement(
                 "div",
-                null,
-                arrayOfCanvas
+                { className: "filter-container" },
+                React.createElement(
+                    "h2",
+                    null,
+                    "Filters"
+                ),
+                arrayOfGeneralFilters,
+                arrayOfSpecificFilters
             );
         }
     }]);
 
-    return GraphLayout;
+    return FilterLayout;
 }(React.Component);

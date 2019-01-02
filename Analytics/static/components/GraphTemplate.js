@@ -16,15 +16,15 @@ var GraphTemplate = function (_React$Component) {
     }
 
     _createClass(GraphTemplate, [{
-        key: 'componentDidMount',
+        key: "componentDidMount",
         value: function componentDidMount() {
             var ctx = document.getElementById(this.props.data.id).getContext('2d');;
             var myChart = new Chart(ctx, this.props.data);
         }
     }, {
-        key: 'render',
+        key: "render",
         value: function render() {
-            return React.createElement('canvas', { key: this.props.data.id, id: this.props.data.id });
+            return React.createElement("canvas", { style: { maxHeight: "400px", maxWidth: "800px" }, key: this.props.data.id, id: this.props.data.id });
         }
     }]);
 
