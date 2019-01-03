@@ -78,14 +78,14 @@ def fetch_data_from_vra():
             new_position.user_id = user_id[0]
             business_unit_id = db.session.query(BusinessUnit.id).filter_by(business_unit_token=position["business_unit_token"]).first()
             new_position.business_unit_id = business_unit_id[0]
-        db.session.flush()
+            db.session.flush()
         position_view_counters = data["position_view_counter"]
         for view in position_view_counters:
-            new_view = PositionViewCounter(time=convert_to_datetime(view["time"]))
+            position_id = db.session.query(Position.id).filter_by(position_token=view["job_token"]).first()
+            new_view = PositionViewCounter(time=convert_to_datetime(view["time"]),
+                                           position_id=int(position_id[0]))
             db.session.add(new_view)
-            position_id = db.session.query(Position.id).filter(position_token=view["job_token"]).first()
-            new_view.position_id = position_id
-        db.session.flush()
+            db.session.flush()
         position_rights = data["position_rights"]
         for position_right in position_rights:
             position_id = db.session.query(Position.id).filter_by(position_token=position_right["job_token"]).first()
@@ -146,10 +146,11 @@ def fetch_data_from_vra():
         application_events = data["application_event"]
         for event in application_events:
             application_id = db.session.query(Application.id).filter_by(application_token=event["application_token"]).first()
-            user_id = db.session.query(User.id).filter_by(user_token=event["user_token"]).first()
+            if event["user_token"]:
+                user_id = db.session.query(User.id).filter_by(user_token=event["user_token"]).first()
             new_event = ApplicationEvent(applicant_id=application_id[0],
                                          application_event_token=event["token"],
-                                         user_id=user_id[0],
+                                         user_id=user_id[0] or None,
                                          status=event["status"],
                                          step=event["step"],
                                          time=convert_to_datetime(event["time"]),
@@ -161,7 +162,7 @@ def fetch_data_from_vra():
         for feedback in application_feedbacks:
             application_id = db.session.query(Application.id).filter_by(application_token=feedback["application_token"]).first()
             new_feedback = ApplicationFeedback(application_feedback_token=feedback["application_feedback_token"],
-                                               application_id=application_id[0],
+                                               application_id=int(application_id[0]),
                                                rating=feedback["rating"],
                                                rating_time=convert_to_datetime(feedback["rating_time"]),
                                                rating_message=feedback["rating_message"])

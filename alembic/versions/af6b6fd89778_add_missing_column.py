@@ -50,13 +50,13 @@ def upgrade():
     op.create_table('application_feedback',
                     sa.Column('id', sa.Integer(), primary_key=True),
                     sa.Column('application_feedback_token', sa.String(255)),
-                    sa.Column('applicant_id', sa.Integer(), nullable=True),
+                    sa.Column('application_id', sa.Integer(), nullable=True),
                     sa.Column('rating_time', sa.DateTime()),
                     sa.Column('rating_message', sa.Text()),
                     sa.Column('time_created', sa.DateTime(), nullable=True),
                     sa.Column('time_modified', sa.DateTime(), nullable=True),
                     sa.Column('rating', sa.Integer()))
-    op.create_foreign_key(u'application_feedback_application_fk', 'application_feedback', 'application', ['applicant_id'],
+    op.create_foreign_key(u'application_feedback_application_fk', 'application_feedback', 'application', ['application_id'],
                           ['id'])
 
 

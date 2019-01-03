@@ -44,7 +44,8 @@ def efficiency():
 @bp.route("/api/applications", methods=["GET"])
 def get_applications_data():
     filter = json.loads(request.args["data"])
-    layout = ApplicationStatsLayout(context={"filter": filter})
+    layout = ApplicationStatsLayout(context={"filter": filter,
+                                             "user": current_user})
     data = layout.get_configurations()
     response = app.response_class(
         response=json.dumps(data),

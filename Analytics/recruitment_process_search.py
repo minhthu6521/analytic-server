@@ -4,7 +4,7 @@ from search import SearchBase, BaseFilter
 from copy import deepcopy
 from database import db
 from models.position_model import Position, REASON_FOR_VACANCY
-from Analytics.utils.hash import encode_hash
+from Analytics.utils.hash import encode_hash, decode_hash
 
 
 def register(original_class):
@@ -14,6 +14,7 @@ def register(original_class):
 
 class Filter(BaseFilter):
     filters = {}
+    default = None
 
     @classmethod
     def register(cls, id):
@@ -25,17 +26,21 @@ class Filter(BaseFilter):
     def criterion_for(cls, id):
         return Filter.filters.get(id)
 
+    def query_filters(self, context):
+        return []
+
 
 @register
 class DateRangeSelection(Filter):
     id = "timeframe"
     widget = "dropdown_widget"
     title = gettext(u"Select time")
+    default = 30
 
     def set_options(self):
         return [(30, gettext(u"Past 30 days")),
-                (1800, gettext(u"Past six months")),
-                (3600, gettext(u"Past year")),
+                (180, gettext(u"Past six months")),
+                (365, gettext(u"Past year")),
                 ("custom", gettext(u"Custom timeframe"))]
 
 
@@ -64,6 +69,11 @@ class PositionFilter(Filter):
             "value": encode_hash(job_id),
             "label": job_name} for job_name, job_id in query.all()]
 
+    def query_filters(self, context):
+        if context["filter"][self.id] and len(context["filter"][self.id]) > 0:
+            return [Position.id.in_([decode_hash(pid) for pid in context["filter"][self.id]])]
+        return []
+
 
 @register
 class ReasonForVacancyFilter(Filter):
@@ -73,6 +83,11 @@ class ReasonForVacancyFilter(Filter):
 
     def set_options(self):
         return REASON_FOR_VACANCY
+
+    def query_filters(self, context):
+        if context["filter"][self.id] and len(context["filter"][self.id]) > 0:
+            return [Position.reason_for_vacancy.in_(context["filter"][self.id])]
+        return []
 
 
 class RecruitmentSearch(SearchBase):

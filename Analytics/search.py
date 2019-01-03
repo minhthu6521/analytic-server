@@ -26,6 +26,9 @@ class BaseFilter(object):
     def set_configuration(self):
         pass
 
+    def query_filters(self, context):
+        return []
+
 
 class SearchBase(object):
     FILTERS = None
@@ -44,7 +47,8 @@ class SearchBase(object):
         'specific': {
             'header': "Specific positions",
             'items': []
-        }
+        },
+        'default': {}
     }
     GENERAL_SEARCH = []
     SPECIFIC_SEARCH = []
@@ -67,13 +71,14 @@ class SearchBase(object):
                         "context": {
                             "title": filter.title or "",
                             "options": filter.set_options(),
-                            "configuration": filter.set_configuration(),
-                            "default": filter.default or None
+                            "configuration": filter.set_configuration()
                         }
                     }
             if filter_id in self.GENERAL_SEARCH:
                 plan['general']["items"].append(_obj)
             else:
                 plan['specific']["items"].append(_obj)
+            if filter.default:
+                plan['default'].update({filter_id: filter.default})
         self.plan = plan
         return self.plan

@@ -84,6 +84,7 @@ def upgrade():
                     sa.Column('position_id', sa.Integer(), nullable=True),
                     sa.Column('time_created', sa.DateTime(), nullable=True),
                     sa.Column('time_modified', sa.DateTime(), nullable=True),
+                    sa.Column('time', sa.DateTime(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_table('talent',

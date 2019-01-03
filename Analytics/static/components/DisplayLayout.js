@@ -6,27 +6,28 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var GraphTemplate = function (_React$Component) {
-    _inherits(GraphTemplate, _React$Component);
+var DisplayLayout = function (_React$Component) {
+    _inherits(DisplayLayout, _React$Component);
 
-    function GraphTemplate() {
-        _classCallCheck(this, GraphTemplate);
+    function DisplayLayout(props) {
+        _classCallCheck(this, DisplayLayout);
 
-        return _possibleConstructorReturn(this, (GraphTemplate.__proto__ || Object.getPrototypeOf(GraphTemplate)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (DisplayLayout.__proto__ || Object.getPrototypeOf(DisplayLayout)).call(this, props));
     }
 
-    _createClass(GraphTemplate, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
-            var ctx = document.getElementById(this.props.data.id).getContext('2d');;
-            var myChart = new Chart(ctx, this.props.data);
-        }
-    }, {
+    _createClass(DisplayLayout, [{
         key: "render",
         value: function render() {
-            return React.createElement("canvas", { style: { maxHeight: "400px", maxWidth: "800px" }, key: this.props.data.id, id: this.props.data.id });
+            var arrayOfCanvas = this.props.data.map(function (obj) {
+                return React.createElement(DisplayItem, { data: obj, key: obj.id });
+            });
+            return React.createElement(
+                "div",
+                null,
+                arrayOfCanvas
+            );
         }
     }]);
 
-    return GraphTemplate;
+    return DisplayLayout;
 }(React.Component);

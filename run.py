@@ -11,8 +11,11 @@ engine = sa.create_engine('mysql://root:salasana@localhost/Analytics?charset=utf
 base.metadata.bind = engine
 session = orm.scoped_session(orm.sessionmaker())(bind=engine)
 
-user = session.query(User).filter_by(email="thu.nguyen@talentadore.com").first()
-user.is_authenticated = True
+user = session.query(User).filter_by(email="analytics@example.com").first()
+if user:
+    user.is_authenticated = True
+
+
 @mock.patch('flask_login.utils._get_user', return_value=user)
 def get_user(current_user):
     app = create_app('../config.py')

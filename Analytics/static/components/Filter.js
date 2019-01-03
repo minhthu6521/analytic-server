@@ -192,7 +192,6 @@ var CheckboxFilter = function (_React$Component4) {
                 options.splice(index, 1);
             }
 
-            // update the state with the new array of options
             _this4.setState({ options: options });
             _this4.props.action(_this4.props.data.id, options);
         };

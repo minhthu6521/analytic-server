@@ -2,10 +2,10 @@ const plan = JSON.parse(document.getElementById("search_plan").innerText);
 const api = $("#fetch-api").data("fetch_api");
 
 class StatContainer extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            filter: {},
+            filter: props.plan.default,
             data: []
         }
     }
@@ -46,7 +46,7 @@ class StatContainer extends React.Component {
         return (
         <div>
             <FilterLayout plan={this.props.plan}  setFilter={this.setFilter}/>
-            <GraphLayout data={this.state.data}/>
+            <DisplayLayout data={this.state.data}/>
         </div>
         )
     }

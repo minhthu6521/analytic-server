@@ -14,9 +14,9 @@ var PageLayout = function PageLayout() {
         console.log(timerange.value);
     };
     return React.createElement("div", null, React.createElement(NavBar, null), React.createElement(Route, { path: "/dashboard", exact: true, render: function render(props) {
-            return React.createElement(GraphLayout, Object.assign({}, props, { api: "/api/dashboard" }));
+            return React.createElement(DisplayLayout, Object.assign({}, props, { api: "/api/dashboard" }));
         } }), React.createElement(Route, { path: "/feedback", exact: true, render: function render(props) {
-            return React.createElement(GraphLayout, Object.assign({}, props, { api: "/api/feedback" }));
+            return React.createElement(DisplayLayout, Object.assign({}, props, { api: "/api/feedback" }));
         } }), React.createElement("select", { onChange: changeTimeRange, id: "timerange" }, React.createElement("option", { value: "7" }, "7 days"), React.createElement("option", { value: "30" }, "1 month"), React.createElement("option", { value: "90" }, "3 months")));
 };
 

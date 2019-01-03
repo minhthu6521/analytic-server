@@ -14,10 +14,10 @@ var api = $("#fetch-api").data("fetch_api");
 var StatContainer = function (_React$Component) {
     _inherits(StatContainer, _React$Component);
 
-    function StatContainer() {
+    function StatContainer(props) {
         _classCallCheck(this, StatContainer);
 
-        var _this = _possibleConstructorReturn(this, (StatContainer.__proto__ || Object.getPrototypeOf(StatContainer)).call(this));
+        var _this = _possibleConstructorReturn(this, (StatContainer.__proto__ || Object.getPrototypeOf(StatContainer)).call(this, props));
 
         _this.updateData = function () {
             $.ajax({
@@ -35,13 +35,11 @@ var StatContainer = function (_React$Component) {
         _this.setFilter = function (id, value) {
             _this.setState({
                 filter: Object.assign({}, _this.state.filter, _defineProperty({}, id, value))
-            }, function () {
-                _this.updateData();
             });
         };
 
         _this.state = {
-            filter: {},
+            filter: props.plan.default,
             data: []
         };
         return _this;
@@ -50,7 +48,6 @@ var StatContainer = function (_React$Component) {
     _createClass(StatContainer, [{
         key: "componentDidUpdate",
         value: function componentDidUpdate(prevProps, prevState) {
-            console.log("didupdate", this.state.filter, prevState.filter);
             if (!_.isEqual(this.state.filter, prevState.filter)) {
                 this.updateData();
             }
@@ -67,7 +64,7 @@ var StatContainer = function (_React$Component) {
                 "div",
                 null,
                 React.createElement(FilterLayout, { plan: this.props.plan, setFilter: this.setFilter }),
-                React.createElement(GraphLayout, { data: this.state.data })
+                React.createElement(DisplayLayout, { data: this.state.data })
             );
         }
     }]);

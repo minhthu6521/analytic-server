@@ -23,6 +23,12 @@ OUTCOME_STATUSES = {
     WITHDRAWN: lazy_gettext("Withdrawn"),
 }
 
+OUTCOME_EMAIL_SENT = "sent"
+OUTCOME_EMAIL_NOT_SEND = "not_send"
+OUTCOME_DONE_WITHOUT_SEND = "done_without_send"
+OUTCOME_EMAIL_READ = "read"
+OUTCOME_EMAIL_BOUNCED = "bounced"
+
 
 class Community(db.Model, EntityMixin):
     __tablename__ = 'community'
