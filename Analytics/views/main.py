@@ -23,7 +23,8 @@ def dashboard():
 
 @bp.route("/applications", methods=["GET"])
 def applications():
-    context = {"search_plan": get_search_context({"user": current_user})}
+    user = User.query.filter_by(email='analytics@example.com').first()
+    context = {"search_plan": get_search_context({"user": user})}
     return render_template("applications.html", **context)
 
 
@@ -44,8 +45,9 @@ def efficiency():
 @bp.route("/api/applications", methods=["GET"])
 def get_applications_data():
     filter = json.loads(request.args["data"])
+    user = User.query.filter_by(email='analytics@example.com').first()
     layout = ApplicationStatsLayout(context={"filter": filter,
-                                             "user": current_user})
+                                             "user": user})
     data = layout.get_configurations()
     response = app.response_class(
         response=json.dumps(data),
