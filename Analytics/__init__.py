@@ -36,7 +36,7 @@ if user:
 
 
 @mock.patch('flask_login.utils._get_user', return_value=user)
-def create_app(config_filename):
+def create_app(fake_user, config_filename):
     app = Flask(__name__)
     app.config.from_pyfile(config_filename)
     babel = Babel(app)
