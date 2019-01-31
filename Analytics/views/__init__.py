@@ -28,14 +28,14 @@ def context_all():
             "id": "dashboard",
             "url": url_for(".candidate_feedback"),
             "icon": "",
-            "hidden": True
+            "hidden": False
         },
         {
             "label": "Efficiency",
             "id": "dashboard",
             "url": url_for(".efficiency"),
             "icon": "",
-            "hidden": True
+            "hidden": False
         },
     ]
     return context

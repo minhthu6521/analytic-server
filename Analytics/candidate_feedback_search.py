@@ -90,13 +90,13 @@ class ReasonForVacancyFilter(Filter):
         return []
 
 
-class RecruitmentSearch(SearchBase):
+class CandidateFeedbackSearch(SearchBase):
     FILTERS = Filter
     GENERAL_SEARCH = ["timeframe", "timeframe_custom"]
 
 
-def get_application_search_context(context):
-    plan = RecruitmentSearch(context=context)
+def get_feedback_search_context(context):
+    plan = CandidateFeedbackSearch(context=context)
     return json.dumps(plan.create_search_plan())
 
 

@@ -7,6 +7,7 @@ Create Date: 2018-11-03 16:10:18.394090
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects import mysql
 
 
 # revision identifiers, used by Alembic.
@@ -142,14 +143,34 @@ def upgrade():
                     sa.Column('feedback_score', sa.Float(), default=None),
                     sa.Column('feedback_rating', sa.Float(), default=None),
                     sa.Column('recommendation_similarity', sa.Float(), default=None),
+                    sa.Column('json_ratings', mysql.MEDIUMTEXT(), nullable=True),
                     sa.PrimaryKeyConstraint('id')
                     )
     op.create_foreign_key(u'application_position_fk', 'application', 'position', ['position_id'], ['id'])
     op.create_foreign_key(u'application_company_fk', 'application', 'company', ['company_id'], ['id'])
     op.create_foreign_key(u'application_talent_fk', 'application', 'talent', ['talent_id'], ['id'])
+    op.create_table('interview_slot',
+                    sa.Column('id', sa.Integer(), nullable=False),
+                    sa.Column('user_id', sa.Integer(), nullable=True),
+                    sa.Column('begins', sa.DateTime(), nullable=False),
+                    sa.Column('ends', sa.DateTime(), nullable=False),
+                    sa.Column('for_applicant_status', sa.Integer(), nullable=True),
+                    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+                    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('offered_slot',
+                    sa.Column('slot_id', sa.Integer(), nullable=False),
+                    sa.Column('application_id', sa.Integer(), nullable=False),
+                    sa.Column('confirmation', sa.String(length=64), nullable=True),
+                    sa.ForeignKeyConstraint(['application_id'], ['application.id'], ),
+                    sa.ForeignKeyConstraint(['slot_id'], ['interview_slot.id'], ),
+                    sa.PrimaryKeyConstraint('slot_id', 'application_id')
+    )
 
 
 def downgrade():
+    op.drop_table('offered_slot')
+    op.drop_table('interview_slot')
     op.drop_table('application')
     op.drop_table('talent_communities')
     op.drop_table('community')

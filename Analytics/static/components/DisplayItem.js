@@ -25,6 +25,10 @@ var DisplayItem = function (_React$Component) {
                 return React.createElement(LineChart, { data: obj["data"], id: obj.id, key: obj.id });
             } else if (obj["display_type"] == "text") {
                 return React.createElement(TextField, { data: obj["data"], id: obj.id, key: obj.id });
+            } else if (obj["display_type"] == "pie_chart") {
+                return React.createElement(PieChart, { data: obj["data"], id: obj.id, key: obj.id });
+            } else if (obj["display_type"] == "bar_chart") {
+                return React.createElement(BarChart, { data: obj["data"], id: obj.id, key: obj.id });
             }
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -108,8 +112,63 @@ var LineChart = function (_React$Component2) {
     return LineChart;
 }(React.Component);
 
-var TextField = function (_React$Component3) {
-    _inherits(TextField, _React$Component3);
+var BarChart = function (_React$Component3) {
+    _inherits(BarChart, _React$Component3);
+
+    function BarChart() {
+        var _ref3;
+
+        var _temp3, _this4, _ret3;
+
+        _classCallCheck(this, BarChart);
+
+        for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+            args[_key3] = arguments[_key3];
+        }
+
+        return _ret3 = (_temp3 = (_this4 = _possibleConstructorReturn(this, (_ref3 = BarChart.__proto__ || Object.getPrototypeOf(BarChart)).call.apply(_ref3, [this].concat(args))), _this4), _this4.updateChart = function () {
+            var chart_data = {
+                type: "bar",
+                data: _this4.props.data,
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            };
+            var ctx = document.getElementById(_this4.props.id).getContext('2d');
+            var myChart = new Chart(ctx, chart_data);
+        }, _temp3), _possibleConstructorReturn(_this4, _ret3);
+    }
+
+    _createClass(BarChart, [{
+        key: "componentDidUpdate",
+        value: function componentDidUpdate(prevProps) {
+            if (!_.isEqual(this.props.data, prevProps.data)) {
+                this.updateChart();
+            }
+        }
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            this.updateChart();
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            return React.createElement("canvas", { style: { maxHeight: "400px", maxWidth: "800px" }, id: this.props.id });
+        }
+    }]);
+
+    return BarChart;
+}(React.Component);
+
+var TextField = function (_React$Component4) {
+    _inherits(TextField, _React$Component4);
 
     function TextField() {
         _classCallCheck(this, TextField);
@@ -145,4 +204,66 @@ var TextField = function (_React$Component3) {
     }]);
 
     return TextField;
+}(React.Component);
+
+var PieChart = function (_React$Component5) {
+    _inherits(PieChart, _React$Component5);
+
+    function PieChart() {
+        var _ref4;
+
+        var _temp4, _this6, _ret4;
+
+        _classCallCheck(this, PieChart);
+
+        for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+            args[_key4] = arguments[_key4];
+        }
+
+        return _ret4 = (_temp4 = (_this6 = _possibleConstructorReturn(this, (_ref4 = PieChart.__proto__ || Object.getPrototypeOf(PieChart)).call.apply(_ref4, [this].concat(args))), _this6), _this6.updateChart = function () {
+            var chart_data = {
+                type: "pie",
+                data: _this6.props.data
+            };
+            var ctx = document.getElementById(_this6.props.id).getContext('2d');
+            var myChart = new Chart(ctx, chart_data);
+        }, _this6.canUpdate = function () {
+            return !_this6.props.data.datasets[0].data.every(function (e) {
+                return e == 0;
+            });
+        }, _temp4), _possibleConstructorReturn(_this6, _ret4);
+    }
+
+    _createClass(PieChart, [{
+        key: "componentDidUpdate",
+        value: function componentDidUpdate(prevProps) {
+            if (!_.isEqual(this.props.data, prevProps.data)) {
+                if (this.canUpdate()) {
+                    this.updateChart();
+                }
+            }
+        }
+    }, {
+        key: "componentDidMount",
+        value: function componentDidMount() {
+            if (this.canUpdate()) {
+                this.updateChart();
+            }
+        }
+    }, {
+        key: "render",
+        value: function render() {
+            if (!this.canUpdate()) {
+                return React.createElement(
+                    "div",
+                    null,
+                    "Not enough data"
+                );
+            } else {
+                return React.createElement("canvas", { style: { maxHeight: "400px", maxWidth: "800px" }, id: this.props.id });
+            }
+        }
+    }]);
+
+    return PieChart;
 }(React.Component);

@@ -33,7 +33,7 @@ def create_app(config_filename):
 
     @babel.localeselector
     def get_locale():
-        if current_user.is_authenticated:
+        if current_user and current_user.is_authenticated:
             locale = ("en")
         else:
             locale = request.accept_languages.best_match("en")

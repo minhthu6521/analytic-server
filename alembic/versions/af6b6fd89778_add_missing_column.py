@@ -34,7 +34,7 @@ def upgrade():
     op.create_foreign_key(u'position_right_user_fk1', 'position_rights', 'user', ['user_id'], ['id'])
     op.create_table('application_event',
                     sa.Column('id', sa.Integer(), primary_key=True),
-                    sa.Column('applicant_id', sa.Integer(), nullable=True),
+                    sa.Column('application_id', sa.Integer(), nullable=True),
                     sa.Column('application_event_token', sa.String(255)),
                     sa.Column('user_id', sa.Integer(), nullable=True),
                     sa.Column('status', sa.Integer()),
@@ -44,7 +44,7 @@ def upgrade():
                     sa.Column('time_created', sa.DateTime(), nullable=True),
                     sa.Column('time_modified', sa.DateTime(), nullable=True),
                     sa.Column('duration', sa.Integer()))
-    op.create_foreign_key(u'application_event_application_fk', 'application_event', 'application', ['applicant_id'], ['id'])
+    op.create_foreign_key(u'application_event_application_fk', 'application_event', 'application', ['application_id'], ['id'])
     op.create_foreign_key(u'application_event_user_fk', 'application_event', 'user', ['user_id'], ['id'])
 
     op.create_table('application_feedback',

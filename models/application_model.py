@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from flask import json
 import datetime
 from sqlalchemy.ext.associationproxy import association_proxy
+from sqlalchemy.dialects import mysql
 from flask_babel import lazy_gettext
 
 from blueprint import db
@@ -80,7 +82,6 @@ class Talent(db.Model, EntityMixin):
     time_confirmed_membership = db.Column(db.DateTime)
     time_added_to_talent_community = db.Column(db.DateTime, default=None)
     language = db.Column(db.Integer)
-    image = db.Column(db.String(255))
 
 
 class Application(db.Model, EntityMixin):
@@ -103,21 +104,32 @@ class Application(db.Model, EntityMixin):
 
     want_feedback = db.Column(db.Boolean, default=True, server_default='1')
 
+    json_ratings = db.Column(mysql.MEDIUMTEXT(), default=json.dumps({}))
+
     average_rating = db.Column(db.Float, default=None)
     feedback_score = db.Column(db.Float, default=None)
     feedback_rating = db.Column(db.Float, default=None)
     recommendation_similarity = db.Column(db.Float, default=None)
+    events = db.relationship("ApplicationEvent", cascade="all, delete-orphan")
+
+    @property
+    def ratings(self):
+        if self.json_ratings:
+            return json.loads(self.json_ratings)
+        return {}
 
 
 class ApplicationEvent(db.Model, EntityMixin):
     __tablename__ = 'application_event'
     id = db.Column(db.Integer, primary_key=True)
-    applicant_id = db.Column(db.Integer, db.ForeignKey('application.id'))
+    application_id = db.Column(db.Integer, db.ForeignKey('application.id'))
     application = db.relationship('Application')
     application_event_token = db.Column(db.String(255))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship('User')
     status = db.Column(db.Integer)
+    status_update = db.Column(db.Boolean, default=0, server_default=db.text('0'))
+    outcome_status = db.Column(db.Integer, nullable=True)
     step = db.Column(db.String(255))
     time = db.Column(db.DateTime, default=datetime.datetime.utcnow)
     note = db.Column(db.String(255))

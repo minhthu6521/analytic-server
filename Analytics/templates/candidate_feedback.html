@@ -1,0 +1,11 @@
+{% extends "main.html" %}
+{% block title %} {{ _('Candidate feedback') }} {% endblock %}
+{% block body %}
+    <h1>{{ _('Candidate feedback') }}</h1>
+    <div id="fetch-api" data-fetch_api="/api/candidate-feedback"></div>
+    <div id="stat_container"></div>
+    <div id="search_plan" style="display: none;">{{ search_plan }}</div>
+{% endblock %}
+{% block script %}
+
+{% endblock %}

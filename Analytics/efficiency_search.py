@@ -4,6 +4,7 @@ from search import SearchBase, BaseFilter
 from copy import deepcopy
 from database import db
 from models.position_model import Position, REASON_FOR_VACANCY
+from models.user_model import User
 from Analytics.utils.hash import encode_hash, decode_hash
 
 
@@ -57,46 +58,31 @@ class CustomDateTimeFilter(Filter):
 
 
 @register
-class PositionFilter(Filter):
-    id = "position_filter"
-    widget = "select2_widget"
-    title = gettext(u"Position")
+class UserFilter(Filter):
+    id = "user_filter"
+    widget = "dropdown_widget"
+    title = gettext(u"Select user")
 
     def set_options(self):
         user = self.context["user"]
-        query = db.session.query(Position.internal_name, Position.id).filter_by(company_id=user.company_id)
-        return [{
-            "value": encode_hash(job_id),
-            "label": job_name} for job_name, job_id in query.all()]
+        query = db.session.query(User.last_name, User.first_name, User.id).filter_by(company_id=user.company_id)
+        options = [(encode_hash(user_id), lastname + " " + firstname) for lastname, firstname, user_id in query.all()]
+        self.default = options[0][0]
+        return options
 
     def query_filters(self, context):
         if context["filter"][self.id] and len(context["filter"][self.id]) > 0:
-            return [Position.id.in_([decode_hash(pid) for pid in context["filter"][self.id]])]
+            return [User.id.in_([decode_hash(context["filter"][self.id])])]
         return []
 
 
-@register
-class ReasonForVacancyFilter(Filter):
-    id = "reason_of_vacancy_filter"
-    widget = "checkbox_widget"
-    title = gettext(u"Reason for vacancy")
-
-    def set_options(self):
-        return REASON_FOR_VACANCY
-
-    def query_filters(self, context):
-        if context["filter"][self.id] and len(context["filter"][self.id]) > 0:
-            return [Position.reason_for_vacancy.in_(context["filter"][self.id])]
-        return []
-
-
-class RecruitmentSearch(SearchBase):
+class EfficiencySearch(SearchBase):
     FILTERS = Filter
     GENERAL_SEARCH = ["timeframe", "timeframe_custom"]
 
 
-def get_application_search_context(context):
-    plan = RecruitmentSearch(context=context)
+def get_efficiency_search_context(context):
+    plan = EfficiencySearch(context=context)
     return json.dumps(plan.create_search_plan())
 
 

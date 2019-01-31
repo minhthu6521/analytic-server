@@ -31,3 +31,16 @@ class User(db.Model, EntityMixin):
     roles = db.Column(db.Text)
     password = db.Column(db.String(255))
     email = db.Column(db.String(255))
+
+
+class Task(db.Model, EntityMixin):
+    __tablename__ = 'user_task'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', foreign_keys=[user_id])
+    due_time = db.Column(db.DateTime)
+    assigner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    assigner = db.relationship('User', foreign_keys=[assigner_id])
+    is_done = db.Column(db.Boolean, default=False)
+    application_id = db.Column(db.Integer, db.ForeignKey('application.id', name='application_task_1'))
+    application = db.relationship('Application')
